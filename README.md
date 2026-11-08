@@ -24,7 +24,9 @@ Built against **Wise Platform API version `2026Q4`** (`https://api.wise.com/2026
 | | `wise_cancel_transfer` | `PUT /transfers/{id}/cancel` |
 | `payments` | `wise_fund_transfer` | `POST /profiles/{id}/transfers/{id}/payments` (**sends money**) |
 
-`WISE_ACCESS` picks the level, and each level includes the ones above it. The default is `read`, so an agent can't create or send anything until you raise it. Tools above your level aren't registered at all, so the agent never sees them. `wise_fund_transfer` and `wise_cancel_transfer` are marked `destructiveHint`, so Claude and ChatGPT ask you before calling them.
+`WISE_ACCESS` picks the level, and each level includes the ones above it.
+
+**Recommended: keep the default `read`.** It covers recording and bookkeeping (balances, activity feed, transfer history, statements and rates) and an agent can't create or send anything at that level. `write` and `payments` are there if you ever need them, but they aren't recommended for agents. For recording, `wise_list_activities` and `wise_list_transfers` work with any personal token. `wise_get_balance_statement` gives line-by-line transactions, but only for accounts in the countries listed below. Tools above your level aren't registered at all, so the agent never sees them. `wise_fund_transfer` and `wise_cancel_transfer` are marked `destructiveHint`, so Claude and ChatGPT ask you before calling them.
 
 A typical send flow:
 
@@ -56,7 +58,7 @@ Requires Node 20+. Try it against the **sandbox** first: create an account at [w
 |---|---|
 | `WISE_API_TOKEN` | **Required.** Your personal API token |
 | `WISE_ENV` | `sandbox` (default) or `production` |
-| `WISE_ACCESS` | `read` (default), `write` or `payments` |
+| `WISE_ACCESS` | `read` (default, recommended), `write` or `payments` (not recommended) |
 | `WISE_PROFILE_ID` | Optional default profile, so tools don't need `profileId` |
 | `WISE_PRIVATE_KEY_PATH` / `WISE_PRIVATE_KEY` | Optional RSA private key for SCA (a file path, or the inline PEM) |
 | `MCP_AUTH_TOKEN` | HTTP mode only, **required** there: a shared secret of at least 32 characters |
