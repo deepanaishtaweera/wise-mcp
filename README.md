@@ -46,13 +46,13 @@ Wise documents these limits ([Personal API tokens](https://docs.wise.com/guides/
 
 ## Setup
 
+Published on npm as [`@dishtaweera/wise-mcp`](https://www.npmjs.com/package/@dishtaweera/wise-mcp). Your MCP client runs it with `npx`, so there is nothing to install or clone:
+
 ```bash
-npm install
-npm run build
-cp .env.example .env   # fill in, or pass the variables from your MCP client config
+npx -y @dishtaweera/wise-mcp
 ```
 
-Requires Node 20+. Try it against the **sandbox** first: create an account at [wise-sandbox.com](https://wise-sandbox.com), make an API token there, and leave `WISE_ENV=sandbox` (the default). Set `WISE_ENV=production` when you're ready.
+Requires Node 20+. Pass the variables below through your MCP client config. Try it against the **sandbox** first: create an account at [wise-sandbox.com](https://wise-sandbox.com), make an API token there, and leave `WISE_ENV=sandbox` (the default). Set `WISE_ENV=production` when you're ready.
 
 | Variable | |
 |---|---|
@@ -72,8 +72,8 @@ Add this to `~/Library/Application Support/Claude/claude_desktop_config.json` (o
 {
   "mcpServers": {
     "wise": {
-      "command": "node",
-      "args": ["/absolute/path/to/wise-mcp/dist/index.js"],
+      "command": "npx",
+      "args": ["-y", "@dishtaweera/wise-mcp"],
       "env": {
         "WISE_API_TOKEN": "your-token",
         "WISE_ENV": "sandbox",
@@ -87,16 +87,31 @@ Add this to `~/Library/Application Support/Claude/claude_desktop_config.json` (o
 ### Claude Code
 
 ```bash
-claude mcp add wise -e WISE_API_TOKEN=your-token -e WISE_ENV=sandbox -- node /absolute/path/to/wise-mcp/dist/index.js
+claude mcp add wise -e WISE_API_TOKEN=your-token -e WISE_ENV=sandbox -- npx -y @dishtaweera/wise-mcp
 ```
 
-### ChatGPT (and claude.ai custom connectors)
+### ChatGPT desktop app (local)
+
+The ChatGPT desktop app can run local stdio servers through its Codex settings. Add this to `~/.codex/config.toml`:
+
+```toml
+[mcp_servers.wise]
+command = "npx"
+args = ["-y", "@dishtaweera/wise-mcp"]
+
+[mcp_servers.wise.env]
+WISE_API_TOKEN = "your-token"
+WISE_ENV = "sandbox"
+WISE_ACCESS = "read"
+```
+
+### ChatGPT web (and claude.ai custom connectors)
 
 These clients connect to a **remote HTTPS** URL, so run the server in HTTP mode:
 
 ```bash
 export MCP_AUTH_TOKEN=$(openssl rand -hex 32)
-WISE_API_TOKEN=your-token npm run start:http     # http://localhost:3000/mcp
+WISE_API_TOKEN=your-token npx -y @dishtaweera/wise-mcp --http     # http://localhost:3000/mcp
 ```
 
 Expose it over HTTPS. For a quick test, use a tunnel such as `cloudflared tunnel --url http://localhost:3000`. For anything lasting, deploy it to any Node host and set the environment variables there.
@@ -123,6 +138,8 @@ Upload `wise-public.pem` in Wise under Settings → API tokens → Manage public
 ## Development
 
 ```bash
+git clone https://github.com/deepanaishtaweera/wise-mcp && cd wise-mcp
+npm install
 npm test          # builds, then runs node:test against a mocked Wise API
 ```
 

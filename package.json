@@ -1,12 +1,13 @@
 {
-  "name": "wise-mcp",
+  "name": "@dishtaweera/wise-mcp",
   "version": "1.0.0",
   "description": "MCP server for the Wise (TransferWise) API: balances, quotes, recipients and transfers for Claude, ChatGPT and other agents",
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
     "start:http": "node dist/index.js --http",
-    "test": "npm run build && node --test test/*.test.js"
+    "test": "npm run build && node --test test/*.test.js",
+    "prepublishOnly": "npm test"
   },
   "license": "MIT",
   "type": "module",
@@ -26,5 +27,27 @@
   ],
   "engines": {
     "node": ">=20"
-  }
+  },
+  "author": "Deepana Ishtaweera",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/deepanaishtaweera/wise-mcp.git"
+  },
+  "homepage": "https://github.com/deepanaishtaweera/wise-mcp#readme",
+  "bugs": {
+    "url": "https://github.com/deepanaishtaweera/wise-mcp/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "wise",
+    "transferwise",
+    "banking",
+    "exchange-rates",
+    "claude",
+    "chatgpt"
+  ]
 }
