@@ -89,7 +89,8 @@ export function registerTools(server: McpServer, wise: WiseClient, opts: { acces
     title: "Create quote",
     description:
       "Price a transfer: returns the rate, fees, delivery estimate and a quote ID (valid ~30 min) needed to create a transfer. " +
-      "Moves no money. Give exactly one of sourceAmount or targetAmount.",
+      "Moves no money, but needs a full-access token (read-only tokens get error.quote.mustBeAuthenticated); " +
+      "use wise_get_exchange_rate for rates alone. Give exactly one of sourceAmount or targetAmount.",
     inputSchema: {
       profileId,
       sourceCurrency: currency("Currency you send"),
@@ -144,7 +145,9 @@ export function registerTools(server: McpServer, wise: WiseClient, opts: { acces
 
   tool("read", "wise_list_transfers", {
     title: "List transfers",
-    description: "List transfers for a profile, newest first, optionally filtered by status, currency and creation date.",
+    description:
+      "List transfers for a profile, OLDEST first, optionally filtered by status, currency and creation date. " +
+      "For recent transfers set createdDateStart rather than relying on order.",
     inputSchema: {
       profileId,
       status: z.string().optional().describe("Comma-separated, e.g. incoming_payment_waiting,processing,outgoing_payment_sent,cancelled"),
