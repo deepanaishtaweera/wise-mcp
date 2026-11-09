@@ -145,6 +145,16 @@ npm test          # builds, then runs node:test against a mocked Wise API
 
 The code is in three files: `src/wise.ts` (HTTP client and SCA signing), `src/tools.ts` (tool definitions) and `src/index.ts` (config and the stdio/HTTP transports). Responses are passed through as Wise's raw JSON text. Wise IDs are int64, so this avoids any chance of rounding them.
 
+### Releasing
+
+npm won't accept the same version twice, so bump it before each publish. `npm publish` runs the tests first and asks for npm two-factor approval in the browser.
+
+```bash
+npm version patch   # or minor / major; also commits and tags
+git push --follow-tags
+npm publish
+```
+
 ## References
 
 - [Wise API reference (2026Q4)](https://docs.wise.com/api-reference) and its [OpenAPI spec](https://docs.wise.com/_bundle/api-reference/@latest/index.yaml)
